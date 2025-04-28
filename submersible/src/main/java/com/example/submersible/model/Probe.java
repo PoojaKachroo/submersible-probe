@@ -38,19 +38,32 @@ public class Probe {
     }
 
     private void moveForward() {
-        //To-Do
+        int newX = x + direction.getDx();
+        int newY = y + direction.getDy();
+        if (grid.isInsideGrid(newX, newY) && !grid.hasObstacle(newX, newY)) {
+            x = newX;
+            y = newY;
+            visitedCoordinates.add(x + "," + y);
+        }
     }
 
     private void moveBackward() {
-        //To-Do
+        int newX = x - direction.getDx();
+        int newY = y - direction.getDy();
+        if (grid.isInsideGrid(newX, newY) && !grid.hasObstacle(newX, newY)) {
+            x = newX;
+            y = newY;
+            visitedCoordinates.add(x + "," + y);
+        }
+
     }
 
     private void turnLeft() {
-        direction = direction.left();
+        direction = direction.turnLeft();
     }
 
     private void turnRight() {
-        direction = direction.right();
+        direction = direction.turnRight();
     }
 
     public int getX() { return x; }

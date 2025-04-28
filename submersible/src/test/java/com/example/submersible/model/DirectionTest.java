@@ -8,7 +8,7 @@ public class DirectionTest {
 
     @Test
     void testTurnLeftFromNorth() {
-        assertEquals(Direction.WEST, Direction.NORTH.left());
+        assertEquals(Direction.WEST, Direction.NORTH.turnLeft());
     }
 
     @Test
