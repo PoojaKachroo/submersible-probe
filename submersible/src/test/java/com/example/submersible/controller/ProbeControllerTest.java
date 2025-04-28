@@ -17,7 +17,6 @@ public class ProbeControllerTest {
 
     @Test
     void shouldMoveProbeSuccessfully() throws Exception {
-
         mockMvc.perform(post("/probe/move")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{ \"commands\": \"FFRFF\" }"))

@@ -49,7 +49,7 @@ public class ProbeTest {
 
         probe.processCommands("FRF");
 
-        List<String> expectedPath = List.of("0,0", "0,1", "1,1", "1,2");
+        List<String> expectedPath = List.of("0,0", "0,1", "1,1");
         assertEquals(expectedPath, probe.getVisitedCoordinates());
     }
 }

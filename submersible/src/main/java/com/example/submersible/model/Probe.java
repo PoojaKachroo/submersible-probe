@@ -18,14 +18,24 @@ public class Probe {
         visitedCoordinates.add(x + "," + y);
     }
 
-    public void processCommands(String commands) {
-        for (char c : commands.toCharArray()) {
-            switch (c) {
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public boolean processCommands(String commands) {
+        boolean obstacleDetected = false;
+
+        for (char command : commands.toCharArray()) {
+            switch (command) {
                 case 'F':
-                    moveForward();
+                    obstacleDetected = moveForward() || obstacleDetected;
                     break;
                 case 'B':
-                    moveBackward();
+                    obstacleDetected = moveBackward() || obstacleDetected;
                     break;
                 case 'L':
                     turnLeft();
@@ -33,29 +43,43 @@ public class Probe {
                 case 'R':
                     turnRight();
                     break;
+                default:
+                    throw new IllegalArgumentException("Invalid command: " + command);
             }
         }
+        return obstacleDetected;
     }
 
-    private void moveForward() {
+    private boolean moveForward() {
         int newX = x + direction.getDx();
         int newY = y + direction.getDy();
-        if (grid.isInsideGrid(newX, newY) && !grid.hasObstacle(newX, newY)) {
-            x = newX;
-            y = newY;
-            visitedCoordinates.add(x + "," + y);
+        if (grid.isInsideGrid(newX, newY)) {
+            if (!grid.hasObstacle(newX, newY)) {
+                x = newX;
+                y = newY;
+                visitedCoordinates.add(x + "," + y);
+                return false;
+            } else {
+                return true;
+            }
         }
+        return false;
     }
 
-    private void moveBackward() {
+    private boolean moveBackward() {
         int newX = x - direction.getDx();
         int newY = y - direction.getDy();
-        if (grid.isInsideGrid(newX, newY) && !grid.hasObstacle(newX, newY)) {
-            x = newX;
-            y = newY;
-            visitedCoordinates.add(x + "," + y);
+        if (grid.isInsideGrid(newX, newY)) {
+            if (!grid.hasObstacle(newX, newY)) {
+                x = newX;
+                y = newY;
+                visitedCoordinates.add(x + "," + y);
+                return false;
+            } else {
+                return true;
+            }
         }
-
+        return false;
     }
 
     private void turnLeft() {

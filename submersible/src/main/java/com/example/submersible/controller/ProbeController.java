@@ -26,11 +26,21 @@ public class ProbeController {
 
     @PostMapping("/move")
     public ResponseEntity<?> move(@RequestBody MoveRequest moveRequest) {
-        probe.processCommands(moveRequest.getCommands());
-        Map<String, Object> response = new HashMap<>();
-        response.put("position", Map.of("x", probe.getX(), "y", probe.getY()));
-        response.put("visited", probe.getVisitedCoordinates());
-        return ResponseEntity.ok(response);
+        if (moveRequest.getCommands() == null || moveRequest.getCommands().isEmpty()) {
+            return ResponseEntity.badRequest().body("Commands must not be empty.");
+        }
+
+        try {
+            boolean obstacleDetected = probe.processCommands(moveRequest.getCommands());
+            Map<String, Object> response = new HashMap<>();
+            response.put("position", Map.of("x", probe.getX(), "y", probe.getY()));
+            response.put("direction", probe.getDirection());
+            response.put("visited", probe.getVisitedCoordinates());
+            response.put("obstacleDetected", obstacleDetected);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     static class MoveRequest {
@@ -39,4 +49,3 @@ public class ProbeController {
         public void setCommands(String commands) { this.commands = commands; }
     }
 }
-
